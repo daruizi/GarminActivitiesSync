@@ -1,12 +1,12 @@
 name: Sync Garmin Global to Garmin CN
 
-on:
-  workflow_dispatch:
-  schedule:
+#on:
+ # workflow_dispatch:
+ # schedule:
     # 每1小时检查一次
-    - cron: "0 */1 * * *"
+  #  - cron: "0 */1 * * *"
     # 时区设置为北京时间
-      timezone: 'Asia/Shanghai'
+    #  timezone: 'Asia/Shanghai'
 
 env:
   # please change to your own config.
