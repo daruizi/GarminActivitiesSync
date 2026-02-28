@@ -1,6 +1,6 @@
 name: Sync Garmin Global to Garmin CN
 
-on:
+#on:
   workflow_dispatch:
   schedule:
     # 每1小时检查一次
