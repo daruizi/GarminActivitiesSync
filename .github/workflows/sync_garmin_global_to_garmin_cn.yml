@@ -3,8 +3,8 @@ name: Sync Garmin Global to Garmin CN
 on:
   workflow_dispatch:
   schedule:
-    # 每2小时检查一次 (UTC时间，相当于北京时间的偶数整点)
-    - cron: "0 */2 * * *"
+    # 每1小时检查一次 (UTC时间，相当于北京时间的每个整点)
+    - cron: "0 * * * *"
 
 # 并发控制：如果当前有任务正在运行，取消旧任务或排队，防止 Git push 冲突
 concurrency:
