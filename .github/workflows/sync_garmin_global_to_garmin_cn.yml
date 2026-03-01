@@ -3,10 +3,13 @@ name: Sync Garmin Global to Garmin CN
 on:
   workflow_dispatch:
   schedule:
-    # 每2小时检查一次
+    # 每2小时检查一次 (UTC时间，相当于北京时间的偶数整点)
     - cron: "0 */2 * * *"
-    # 时区设置为北京时间
-    # timezone: 'Asia/Shanghai'
+
+# 并发控制：如果当前有任务正在运行，取消旧任务或排队，防止 Git push 冲突
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
 
 env:
   # please change to your own config.
@@ -26,17 +29,23 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: Sync Garmin Global to Garmin CN
+    # 增加 Job 级别的超时限制，防止意外卡死消耗资源
+    timeout-minutes: 15
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4 # 升级到 v4
+      
+      - uses: actions/setup-node@v4 # 升级到 v4
         with:
-          node-version: "18"
+          node-version: "20" # 升级到长期支持版 Node.js 20
           cache: "yarn"
+          
       - run: yarn
+      
       - run: yarn sync_global
         timeout-minutes: 5
+        
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: Save Garmin Session
